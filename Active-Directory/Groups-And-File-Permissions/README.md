@@ -1,4 +1,4 @@
-# Active Directory Groups, AGDLP & Department File Access
+<img width="931" height="655" alt="image" src="https://github.com/user-attachments/assets/f9d4eca0-1dc2-435c-b145-534d111fd50c" /># Active Directory Groups, AGDLP & Department File Access
 
 ## Project Overview
 
@@ -102,9 +102,7 @@ technicaltechnotech.com
 
 ### Screenshot
 
-```text
-screenshots/01-groups-ou.png
-```
+![Groups OU](./groups-ou.png)
 
 ***
 
@@ -159,9 +157,7 @@ This identifies Sarah as an IT employee but does not directly give Sarah access 
 
 ### Screenshot
 
-```text
-screenshots/02-global-group-membership.png
-```
+![Global Membership](./global-membership.png)
 
 ***
 
@@ -202,9 +198,7 @@ NTFS Modify
 
 ### Screenshot
 
-```text
-screenshots/03-agdlp-group-nesting.png
-```
+![Nesting](./nesting.png)
 
 ***
 
@@ -310,12 +304,6 @@ Invoke-Command -ComputerName DC02 -ScriptBlock {
 The SMB layer allowed domain users to connect to the share.
 
 Individual departmental access was then controlled through **NTFS permissions**.
-
-### Screenshot
-
-```text
-screenshots/04-departments-smb-share.png
-```
 
 ***
 
@@ -566,9 +554,7 @@ The same configuration model was then applied to the HR and Sales folders.
 
 ### Screenshot
 
-```text
-screenshots/05-it-ntfs-permissions.png
-```
+![NTFS Permissions](./ntfs-permissions.png)
 
 ***
 
@@ -667,10 +653,9 @@ ACCESS DENIED
 
 ### Screenshots
 
-```text
-screenshots/06-sarah-it-access-success.png
-screenshots/07-diana-it-access-denied.png
-```
+![Success](./success.png)
+![Denied](./denied.png)
+
 
 ***
 
@@ -782,12 +767,6 @@ Permissions
 ```
 
 Because my current lab contains only one domain, the simpler **AGDLP** model was sufficient for the actual departmental permissions.
-
-### Screenshot
-
-```text
-screenshots/08-universal-distribution-groups.png
-```
 
 ***
 
