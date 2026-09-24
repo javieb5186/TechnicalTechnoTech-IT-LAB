@@ -74,7 +74,7 @@ Sarah Connor was successfully created as an AD DS user and placed inside the IT 
 Screenshot
 
 Add screenshot of Sarah Connor in ADAC.
-[Sarah Conner in ADAC]()
+![Sarah Conner in ADAC](./sarah-conner.png)
 
 ***
 
@@ -96,8 +96,7 @@ Peter Parker was successfully created directly inside the Sales OU.
 
 Screenshot
 
-Add screenshot of Peter Parker in the Sales OU.
-[Peter Parker in ADAC]()
+![Peter Parker in ADAC](./peter-parker.png)
 
 ***
 
@@ -145,8 +144,7 @@ Administrators can combine tools such as Windows Admin Center, ADUC, and PowerSh
 
 Screenshot
 
-Add screenshot of Windows Admin Center Active Directory management.
-[Bruce Wayne in Windows Admin Center]()
+[Bruce Wayne in Windows Admin Center](./bwayne.png)
 
 ***
 
@@ -203,7 +201,7 @@ This confirmed:
 
 Screenshot
 
-Add screenshot of the PowerShell verification output.
+![Diane Prince in PowerShell](./diana-prince.png)
 
 ***
 
@@ -244,7 +242,7 @@ The Distinguished Name confirmed that Clark Kent was created directly inside the
 
 Screenshot
 
-Add screenshot of the successful dsadd operation.
+![Clark Kent in dsadd](./clark-kent.png)
 
 ⸻
 
