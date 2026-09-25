@@ -425,6 +425,10 @@ SUCCESS
 
 This confirmed that the delegated permission was working.
 
+Screenshot
+
+![Password Changed](./password-changed.png)
+
 ***
 
 # Test 2 — Sales Password Reset
@@ -457,6 +461,10 @@ DENIED
 ```
 
 This confirmed that the delegation was restricted to the intended OU.
+
+Screenshot
+
+![Password Change Denied](./password-change-denied.png)
 
 ***
 
@@ -780,6 +788,10 @@ gpresult /scope computer /r
 Policy verified
 ```
 
+Screenshot
+
+![GPO Verfied](./gpo-verified.png)
+
 ***
 
 # Testing the GPO
@@ -793,6 +805,10 @@ Technical Techno Tech
 ```
 
 interactive logon message appeared successfully.
+
+Screenshot
+
+![GPO in effect](./gpo-in-effect.png)
 
 This provided visible confirmation that the GPO linked to the Workstations OU had reached CLIENT01.
 
@@ -988,145 +1004,6 @@ These tests demonstrated both **successful authorization** and **intentional res
 - Remote Desktop Services Concepts
 - Active Directory Troubleshooting
 - Configuration Validation
-
-***
-
-# Recommended Screenshots
-
-The following screenshots provide evidence of the major stages of the project.
-
-## 1. Workstations OU
-
-Show:
-
-```text
-Workstations
-└── CLIENT01
-```
-
-Suggested filename:
-
-```text
-screenshots/01-workstations-ou.png
-```
-
-## 2. Computer Distinguished Name
-
-Show CLIENT01 located at:
-
-```text
-CN=CLIENT01,OU=Workstations,DC=technicaltechnotech,DC=com
-```
-
-Suggested filename:
-
-```text
-screenshots/02-client01-distinguished-name.png
-```
-
-## 3. `redircmp` Success
-
-Show the successful command:
-
-```cmd
-redircmp "OU=Workstations,DC=technicaltechnotech,DC=com"
-```
-
-Suggested filename:
-
-```text
-screenshots/03-redircmp-success.png
-```
-
-## 4. Delegation Group
-
-Show:
-
-```text
-GG_HelpDesk_OU_Admins
-└── Sarah Connor
-```
-
-Suggested filename:
-
-```text
-screenshots/04-delegation-group.png
-```
-
-## 5. Successful HR Password Reset
-
-Show Sarah successfully performing the delegated password-reset task for Diana Prince.
-
-Suggested filename:
-
-```text
-screenshots/05-hr-password-reset-success.png
-```
-
-## 6. Sales Password Reset Denied
-
-Show Sarah receiving the permission/access error when attempting to reset Peter Parker's password.
-
-Suggested filename:
-
-```text
-screenshots/06-sales-password-reset-denied.png
-```
-
-## 7. Limited HR Administrative Options
-
-Show the HR OU context menu while using Sarah's account, demonstrating that user creation is not available.
-
-Suggested filename:
-
-```text
-screenshots/07-limited-delegation.png
-```
-
-## 8. Workstations GPO Link
-
-Show Group Policy Management with:
-
-```text
-Workstations
-└── TTT Workstation Security Policy
-```
-
-Suggested filename:
-
-```text
-screenshots/08-workstations-gpo.png
-```
-
-## 9. `gpresult` Verification
-
-Show the elevated:
-
-```cmd
-gpresult /scope computer /r
-```
-
-output containing:
-
-```text
-TTT Workstation Security Policy
-```
-
-Suggested filename:
-
-```text
-screenshots/09-gpresult-verification.png
-```
-
-## 10. CLIENT01 Logon Message
-
-Show the Technical Techno Tech interactive logon message.
-
-Suggested filename:
-
-```text
-screenshots/10-workstation-logon-message.png
-```
 
 ***
 
