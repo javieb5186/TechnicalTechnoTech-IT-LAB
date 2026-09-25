@@ -1,4 +1,4 @@
-<img width="931" height="655" alt="image" src="https://github.com/user-attachments/assets/f9d4eca0-1dc2-435c-b145-534d111fd50c" /># Active Directory Groups, AGDLP & Department File Access
+# Active Directory Groups, AGDLP & Department File Access
 
 ## Project Overview
 
