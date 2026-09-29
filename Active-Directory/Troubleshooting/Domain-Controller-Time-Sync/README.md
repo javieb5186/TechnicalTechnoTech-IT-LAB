@@ -105,12 +105,6 @@ repadmin /showrepl
 
 These commands help determine whether domain controllers are successfully exchanging Active Directory changes.
 
-### Memory Hook
-
-```text
-repadmin = Are my DCs replicating?
-```
-
 ---
 
 # Step 3 — Run Domain Controller Diagnostics
@@ -142,6 +136,10 @@ LocatorCheck
 ```
 
 Instead of immediately changing configuration based on every warning, the individual failures were investigated.
+
+### Screenshot
+
+![dcdiag](./dcdiag.png)
 
 ---
 
@@ -231,12 +229,6 @@ Domain Members
 
 The PDC Emulator at the top of the domain time hierarchy should have a reliable upstream time source.
 
-### Memory Hook
-
-```text
-PDC Emulator = AD's main clock
-```
-
 ---
 
 # Step 7 — Investigate Windows Time
@@ -257,6 +249,10 @@ Source: VM IC Time Synchronization Provider
 `Leap Indicator: 3` showed that Windows considered the system clock **unsynchronized**.
 
 The current time source showed that DC01 was receiving time through the Hyper-V integration service.
+
+### Screenshot
+
+![Bad Windows Time Status](./bad-time-status)
 
 ---
 
@@ -318,6 +314,8 @@ State: Pending
 
 Information about the previous synchronization attempt indicated that a usable time source had not been successfully established.
 
+![Bad NTP peer](./bad-peer)
+
 ---
 
 # Step 10 — Configure an External NTP Source
@@ -363,6 +361,8 @@ Leap Indicator: 3
 ```
 
 This showed that configuring an NTP peer alone had not completely resolved the issue.
+
+![Good NTP Peer](./good-peer.png)
 
 ---
 
@@ -463,6 +463,10 @@ Enabled: False
 
 This disabled Hyper-V's Time Synchronization integration for DC01 without disabling the Windows Time service inside the virtual machine.
 
+### Screenshot
+
+![Host Configuration](./host-config.png)
+
 ---
 
 # Step 14 — Restart Windows Time and Resynchronize
@@ -493,6 +497,10 @@ w32tm /query /status
 
 DC01 was now able to use its configured Windows Time/NTP configuration correctly rather than relying on the Hyper-V VM IC time source.
 
+### Screenshot
+
+![Good Leap Indicator](./good-leap.png)
+
 ---
 
 # Step 15 — Verify the Repair
@@ -511,21 +519,11 @@ dcdiag /s:DC01 /test:LocatorCheck
 
 Both tests passed.
 
-The troubleshooting process therefore changed the environment from:
+### Screenshots
 
-```text
-Advertising     = FAILED
-LocatorCheck    = FAILED
-Time Sync       = NOT SYNCHRONIZED
-```
+![Good Advertising](./good-advertising.png)
 
-to:
-
-```text
-Advertising     = PASSED
-LocatorCheck    = PASSED
-Time Sync       = WORKING
-```
+![Good Locator](./good-locator.png)
 
 ---
 
@@ -808,120 +806,6 @@ This demonstrated an important troubleshooting principle:
 - Network Service Troubleshooting
 - Root Cause Analysis
 - Verification and Validation
-
----
-
-# Suggested Screenshots
-
-## Screenshot 1 — Initial `dcdiag` Failure
-
-Capture:
-
-```cmd
-dcdiag /s:DC01 /q
-```
-
-showing the Advertising and LocatorCheck failures.
-
----
-
-## Screenshot 2 — PDC Emulator
-
-Capture:
-
-```powershell
-Get-ADDomain |
-    Select-Object PDCEmulator
-```
-
-showing:
-
-```text
-DC01
-```
-
----
-
-## Screenshot 3 — Initial Windows Time Status
-
-Capture:
-
-```cmd
-w32tm /query /status
-```
-
-showing:
-
-```text
-Leap Indicator: 3
-Source: VM IC Time Synchronization Provider
-```
-
-This is one of the most useful screenshots because it shows the condition being investigated.
-
----
-
-## Screenshot 4 — NTP Peer
-
-Capture:
-
-```cmd
-w32tm /query /peers /verbose
-```
-
-showing:
-
-```text
-time.windows.com
-State: Active
-```
-
----
-
-## Screenshot 5 — NTP Connectivity Test
-
-Capture:
-
-```cmd
-w32tm /stripchart /computer:time.windows.com /dataonly /samples:5
-```
-
-showing successful time responses.
-
-This demonstrates that NTP connectivity was tested independently before changing the Hyper-V configuration.
-
----
-
-## Screenshot 6 — Hyper-V Time Synchronization
-
-Capture:
-
-```powershell
-Get-VMIntegrationService -VMName "DC01" |
-    Where-Object Name -eq "Time Synchronization"
-```
-
-showing the Time Synchronization integration service configuration.
-
----
-
-## Screenshot 7 — Successful Verification
-
-Capture the final:
-
-```cmd
-dcdiag /s:DC01 /test:Advertising
-```
-
-and:
-
-```cmd
-dcdiag /s:DC01 /test:LocatorCheck
-```
-
-showing that both tests passed.
-
-This provides clear **before-and-after evidence** that the issue was resolved.
 
 ---
 
