@@ -83,24 +83,11 @@ After performing the bulk edit through ADAC, I opened **Windows PowerShell Histo
 
 ADAC showed that the graphical actions were translated into PowerShell commands using `Set-ADUser`.
 
-Conceptually, the operation looked similar to:
-
-```powershell
-Set-ADUser `
-    -Identity "Peter Parker" `
-    -Company "Technical Techno Tech" `
-    -Department "Sales"
-```
+![ADAC and PowerShell History](./powershell-history.png)
 
 This demonstrated that graphical AD administration tools often execute underlying administrative operations that can also be performed directly with PowerShell.
 
 ### PowerShell Command Structure
-
-PowerShell commonly follows:
-
-```text
-Verb-Noun -Parameter Value
-```
 
 Example:
 
@@ -152,6 +139,8 @@ The CSV was imported using:
 ```powershell
 $users = Import-Csv "C:\TTT\BulkManagement\NewEmployees.csv"
 ```
+
+![Importing a CSV into PowerShell](./import.png)
 
 `Import-Csv` converts each CSV row into a PowerShell object.
 
@@ -286,25 +275,7 @@ foreach ($user in $users) {
         -ChangePasswordAtLogon $true
 }
 ```
-
-The resulting placement was:
-
-```text
-technicaltechnotech.com
-|
-+-- IT
-|   |
-|   +-- Tony Stark
-|
-+-- HR
-|   |
-|   +-- Natasha Romanoff
-|
-+-- Sales
-    |
-    +-- Steve Rogers
-    +-- Wanda Maximoff
-```
+![Creating users with PowerShell](./creating-users.png)
 
 ---
 
@@ -321,14 +292,7 @@ Get-ADUser -Filter * `
     } |
     Select-Object Name,SamAccountName,Department,Title,DistinguishedName
 ```
-
-This verified:
-
-- Account creation
-- Username
-- Department
-- Job title
-- OU placement
+![Check new users with PowerShell](./check-new-users.png)
 
 ### Understanding `$_`
 
@@ -542,6 +506,8 @@ Get-ADUser srogers -Properties Enabled |
 Get-ADUser wmaximoff -Properties Enabled |
     Select-Object Name,Enabled,DistinguishedName
 ```
+
+![Check disabled users with PowerShell](./check-disabled-users.png)
 
 ---
 
@@ -757,127 +723,6 @@ ADUserAudit.csv
 - Distinguished Names
 - AD Reporting and Auditing
 - Administrative Automation
-
----
-
-# Suggested Screenshots
-
-## Screenshot 1 — ADAC Bulk User Modification
-
-Show Peter Parker and Clark Kent being managed together in ADAC or their updated attributes.
-
-Demonstrates:
-
-- ADAC administration
-- Bulk object management
-- Department and Company attributes
-
----
-
-## Screenshot 2 — ADAC PowerShell History
-
-Show the PowerShell History window containing the generated `Set-ADUser` commands.
-
-Demonstrates:
-
-- Relationship between GUI administration and PowerShell
-- PowerShell parameters
-- `Set-ADUser`
-
----
-
-## Screenshot 3 — Employee CSV
-
-Show:
-
-```text
-NewEmployees.csv
-```
-
-with the employee records.
-
-Demonstrates:
-
-- Structured onboarding data
-- CSV-based automation
-
----
-
-## Screenshot 4 — Created AD Users
-
-Show ADAC or ADUC with:
-
-```text
-IT
-└── Tony Stark
-
-HR
-└── Natasha Romanoff
-
-Sales
-├── Steve Rogers
-└── Wanda Maximoff
-```
-
-Demonstrates:
-
-- Automated account creation
-- Correct OU placement
-
----
-
-## Screenshot 5 — Department Group Membership
-
-Show PowerShell output from:
-
-```powershell
-Get-ADGroupMember "GG_IT"
-
-Get-ADGroupMember "GG_HR"
-
-Get-ADGroupMember "GG_Sales"
-```
-
-Demonstrates:
-
-- Automated group assignment
-- Department-based access management
-- AGDLP integration
-
----
-
-## Screenshot 6 — Bulk Offboarding
-
-Show Steve Rogers and Wanda Maximoff:
-
-- Disabled
-- Located inside the Disabled Users OU
-
-PowerShell verification can also be included:
-
-```powershell
-Get-ADUser srogers -Properties Enabled |
-    Select-Object Name,Enabled,DistinguishedName
-```
-
----
-
-## Screenshot 7 — AD User Audit
-
-Show:
-
-```text
-ADUserAudit.csv
-```
-
-with exported AD information.
-
-Demonstrates:
-
-- AD inventory
-- Reporting
-- `Export-Csv`
-- Audit capabilities
 
 ---
 
