@@ -275,8 +275,6 @@ foreach ($user in $users) {
         -ChangePasswordAtLogon $true
 }
 ```
-![Creating users with PowerShell](./creating-users.png)
-
 ---
 
 # Part 7 — Verifying Bulk User Creation
