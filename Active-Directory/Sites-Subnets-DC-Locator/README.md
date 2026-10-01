@@ -294,7 +294,7 @@ The lab already had real IP networks:
 
 I created corresponding subnet objects in **Active Directory Sites and Services**.
 
-![Creating Subnets](./create-subnet.ong)
+![Creating Subnets](./create-subnet.png)
 
 Initially, all three were assigned to:
 
