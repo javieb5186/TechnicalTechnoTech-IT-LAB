@@ -65,7 +65,7 @@ Initially, `EnabledScopes` was empty.
 
 I then enabled the Active Directory Recycle Bin through Active Directory Administrative Center (ADAC).
 
-![Enabling Recycle Bin](./enable-bing/png)
+![Enabling Recycle Bin](./enable-bin.png)
 
 The Recycle Bin was enabled for the forest:
 
