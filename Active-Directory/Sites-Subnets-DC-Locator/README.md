@@ -118,15 +118,7 @@ nltest /dsgetdc:technicaltechnotech.com
 
 The command returned information including:
 
-```text
-DC
-Address
-Domain Name
-Forest Name
-DC Site Name
-Our Site Name
-Flags
-```
+![dsgetdc](./dsgetdc.png)
 
 I also listed available domain controllers:
 
@@ -155,14 +147,6 @@ Which DC does DC Locator return for this request?
 
 These values do not necessarily have to be the same.
 
-### Memory Hook
-
-```text
-LOGONSERVER = who logged me in
-
-DSGETDC = find me a DC
-```
-
 ---
 
 # Part 3 — Examine Active Directory DNS Records
@@ -188,25 +172,6 @@ _ldap._tcp.dc._msdcs.technicaltechnotech.com
 ```
 
 These DNS SRV records advertise domain controllers capable of providing LDAP/domain services.
-
-Conceptually:
-
-```text
-CLIENT01
-    |
-    | Needs a domain controller
-    v
-DNS
-    |
-    | Queries AD SRV records
-    v
-_ldap._tcp.dc._msdcs.technicaltechnotech.com
-    |
-    +----------------+
-    |                |
-    v                v
-  DC01             DC02
-```
 
 ---
 
@@ -265,6 +230,8 @@ using:
 ```text
 DEFAULTIPSITELINK
 ```
+
+![Creating site](./create-site.png)
 
 I then moved:
 
@@ -331,6 +298,8 @@ The lab already had real IP networks:
 
 I created corresponding subnet objects in **Active Directory Sites and Services**.
 
+![Creating Subnets](./create-subnet.ong)
+
 Initially, all three were assigned to:
 
 ```text
@@ -392,10 +361,6 @@ Creating an AD subnet does **not** create the actual IP network.
 
 It simply maps an existing network to an Active Directory site.
 
-### Memory Hook
-
-> **Network subnet = actual network. AD subnet = map the network to an AD site.**
-
 ---
 
 # Part 6 — Verify CLIENT01's Site
@@ -432,10 +397,6 @@ Which AD site owns that subnet?
      v
 HQ-Site
 ```
-
-### Memory Hook
-
-> **Subnet tells AD where the client is; Site tells AD which DCs are nearby.**
 
 ---
 
@@ -772,6 +733,10 @@ The final lab topology returned to:
 
 This accurately represents the current lab as one well-connected location containing multiple IP subnets.
 
+### Screenshot
+
+![AD SS](./adss.png)
+
 ---
 
 # How DC Locator Works — Simplified
@@ -806,58 +771,6 @@ Find an appropriate DC
         |         |
         v         v
       DC01       DC02
-```
-
----
-
-# Domain Controllers and Load Balancing
-
-This lab also clarified an important misconception.
-
-Multiple domain controllers do not normally require a traditional network load balancer such as:
-
-```text
-CLIENT
-   |
-   v
-Load Balancer
-   |
-+--+--+
-|     |
-DC01 DC02
-```
-
-Instead, Active Directory uses mechanisms including:
-
-```text
-DNS
- +
-SRV Records
- +
-DC Locator
- +
-Sites
- +
-Subnets
-```
-
-to help clients locate appropriate domain controllers.
-
-A simplified view is:
-
-```text
-CLIENT01
-    |
-    v
-DNS / DC Locator
-    |
-    v
-AD Site Information
-    |
-    +--------+
-    |        |
-    v        v
-  DC01      DC02
 ```
 
 ---
@@ -1063,117 +976,6 @@ Branch DC
 
 ---
 
-# Suggested Screenshots
-
-## Screenshot 1 — Initial DC Discovery
-
-Capture:
-
-```cmd
-echo %LOGONSERVER%
-```
-
-showing:
-
-```text
-\\DC02
-```
-
----
-
-## Screenshot 2 — DC Locator
-
-Capture:
-
-```cmd
-nltest /dsgetdc:technicaltechnotech.com
-```
-
-showing the returned DC and site information.
-
----
-
-## Screenshot 3 — DNS SRV Records
-
-Capture the `nslookup` results for:
-
-```text
-_ldap._tcp.dc._msdcs.technicaltechnotech.com
-```
-
-showing the domain controllers advertised through DNS.
-
----
-
-## Screenshot 4 — HQ-Site
-
-Capture **Active Directory Sites and Services** showing:
-
-```text
-HQ-Site
-└── Servers
-    ├── DC01
-    └── DC02
-```
-
----
-
-## Screenshot 5 — AD Subnets
-
-Capture the Subnets section showing:
-
-```text
-10.20.10.0/24
-10.20.20.0/24
-10.20.30.0/24
-```
-
----
-
-## Screenshot 6 — CLIENT01 Site
-
-Capture:
-
-```cmd
-nltest /dsgetsite
-```
-
-showing:
-
-```text
-HQ-Site
-```
-
----
-
-## Screenshot 7 — Branch-Site Simulation
-
-Capture Active Directory Sites and Services while:
-
-```text
-10.20.20.0/24 → Branch-Site
-```
-
-This demonstrates the temporary branch-office topology.
-
----
-
-## Screenshot 8 — Branch Client Site
-
-Capture:
-
-```cmd
-nltest /dsgetsite
-```
-
-showing:
-
-```text
-Branch-Site
-```
-
----
-
 # Project Summary
 
 This project demonstrated how Active Directory Domain Services understands the physical/network topology of an organization.
@@ -1193,8 +995,6 @@ DC Locator
     ↓
 Appropriate Domain Controller
 ```
-
-Rather than relying on a traditional load balancer, Active Directory uses **DNS, SRV records, DC Locator, Sites, and Subnets** to help clients locate domain controllers.
 
 The branch-office simulation also demonstrated that AD Sites and Subnets should represent the **real network design** rather than being treated as arbitrary administrative containers.
 
