@@ -38,6 +38,7 @@ NetBIOS domain name:
 - Active Directory Domain Services
 - Active Directory Administrative Center
 - Active Directory PowerShell Module
+- Active Directory Recycle Bin
 - Windows Server Backup
 - PowerShell Remoting
 - Hyper-V
@@ -63,6 +64,8 @@ Get-ADOptionalFeature -Filter 'Name -like "Recycle Bin Feature"' |
 Initially, `EnabledScopes` was empty.
 
 I then enabled the Active Directory Recycle Bin through Active Directory Administrative Center (ADAC).
+
+![Enabling Recycle Bin](./enable-bing/png)
 
 The Recycle Bin was enabled for the forest:
 
@@ -142,6 +145,8 @@ The deleted account was also visible through:
 
 **Active Directory Administrative Center → Deleted Objects**
 
+![Screenshot](./deleted-account.png)
+
 ***
 
 # Part 3 — Restore the Deleted User
@@ -193,10 +198,6 @@ A recreated account receives a new security identity.
 
 The SID, not the visible username, is what Windows uses to identify a security principal.
 
-**Memory Hook:**
-
-> Same name does not mean same security principal.
-
 ***
 
 # Part 4 — Inspect Deleted Object Retention
@@ -206,8 +207,7 @@ I inspected the directory service configuration related to deleted-object retent
 ```powershell
 Get-ADObject `
     -Identity "CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=technicaltechnotech,DC=com" `
-    -Properties msDS-DeletedObjectLifetime,tombstoneLifetime |
-    Select-Object msDS-DeletedObjectLifetime,tombstoneLifetime
+    -Properties *
 ```
 
 These attributes are related to how Active Directory handles deleted objects and their retention.
@@ -240,11 +240,15 @@ Invoke-Command -ComputerName DC01 -ScriptBlock {
 }
 ```
 
+![Powershell Screenshot](./install-server-backup.png)
+
 ***
 
 # Part 6 — Configure Dedicated Backup Storage
 
 A separate virtual hard disk was added to DC01 through Hyper-V.
+
+![Hyper-V New Disk Wizard](./new-disk.png)
 
 The disk was then configured remotely from MGMT01 using PowerShell.
 
@@ -290,6 +294,8 @@ The volume was verified with:
 Get-Volume
 ```
 
+![Formatted Volume](./formatted-volume.png)
+
 ### Key Concept
 
 A dedicated backup disk separates recovery data from the domain controller's normal operating-system volume.
@@ -317,6 +323,8 @@ Invoke-Command -ComputerName DC01 -ScriptBlock {
     wbadmin get versions
 }
 ```
+
+![Screenshot of Successful Backup](./successful-backup.png)
 
 ### Domain Controller System State
 
@@ -402,10 +410,6 @@ quit
 
 No destructive DSRM recovery was required during this project because the domain controllers were healthy.
 
-### Memory Hook
-
-> DSRM = start the DC in a special mode for Active Directory recovery.
-
 ***
 
 # Part 9 — Non-Authoritative Restore
@@ -438,10 +442,6 @@ bring DC01 current
 ```
 
 The restored DC is not intended to overwrite newer directory information from healthy replication partners.
-
-### Memory Hook
-
-> Non-authoritative = restore me, then let healthy DCs bring me current.
 
 An actual restore was not performed because DC01 was healthy and intentionally damaging a functioning domain controller was unnecessary for this lab.
 
@@ -489,10 +489,6 @@ Restore Deleted Object
 ```
 
 An authoritative restore was therefore not performed against the healthy lab domain.
-
-### Memory Hook
-
-> Authoritative = the restored directory data must become authoritative for the recovery scenario.
 
 ***
 
@@ -570,6 +566,8 @@ netdom query fsmo
 
 DC02 successfully became the holder of all five FSMO roles.
 
+![DC02 FSMO Roles](./dc02-roles.png)
+
 ### Architecture During the Test
 
 ```text
@@ -606,10 +604,6 @@ DC02
 ### Key Concept
 
 A normal FSMO transfer is used when both the existing FSMO role holder and the destination domain controller are operational.
-
-### Memory Hook
-
-> Transfer = handoff.
 
 ***
 
@@ -654,6 +648,8 @@ FSMO ownership was verified:
 ```cmd
 netdom query fsmo
 ```
+
+![DC01 FSMO Roles](./dc01-roles.png)
 
 The final lab design returned to:
 
@@ -737,11 +733,6 @@ Move-ADDirectoryServerOperationMasterRole `
 This command was **not executed** during the project.
 
 FSMO seizure should not be treated as a normal administrative transfer.
-
-### Memory Hook
-
-> Transfer = handoff.  
-> Seize = disaster takeover.
 
 ***
 
@@ -899,28 +890,6 @@ These commands verify:
 - `dcdiag`
 - `ntdsutil`
 - `Move-ADDirectoryServerOperationMasterRole`
-
-***
-
-# Suggested Screenshots
-
-Useful screenshots for documenting this project include:
-
-1. Active Directory Recycle Bin enabled in ADAC.
-2. `Recovery Test` visible in Deleted Objects.
-3. Restored `Recovery Test` account in the IT OU.
-4. PowerShell showing the restored user's attributes or group membership.
-5. Dedicated `ADBackup` volume on DC01.
-6. Successful `wbadmin` System State backup.
-7. `wbadmin get versions` showing the available backup.
-8. `netdom query fsmo` showing the original FSMO ownership.
-9. FSMO transfer PowerShell command.
-10. `netdom query fsmo` showing all five roles on DC02.
-11. `repadmin /replsummary` after the transfer.
-12. `dcdiag /s:DC02 /q` health check.
-13. FSMO transfer back to DC01.
-14. Final `netdom query fsmo` output.
-15. Final `repadmin /replsummary` health check.
 
 ***
 
