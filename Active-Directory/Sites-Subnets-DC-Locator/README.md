@@ -116,10 +116,6 @@ I then used `nltest` to ask Windows to locate a domain controller.
 nltest /dsgetdc:technicaltechnotech.com
 ```
 
-The command returned information including:
-
-![dsgetdc](./dsgetdc.png)
-
 I also listed available domain controllers:
 
 ```cmd
@@ -514,6 +510,8 @@ CLIENT01 then correctly reported:
 ```text
 Branch-Site
 ```
+
+![dsgetdc](./dsgetdc.png)
 
 ---
 
